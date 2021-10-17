@@ -10,29 +10,32 @@ class Controller
 {
 
     private const DEFAULT_ACTION = "list";
-    private array $getData;
-    private array $postData;
 
-    public function __construct(array $getData, array $postData)
+    private array $request;
+    private View $view;
+
+    public function __construct(array $request,)
     {
-        $this->postData = $postData;
-        $this->getData = $getData;
+        $this->request = $request;
+        $this->view = new View();
     }
+
 
     public function run(): void
     {
-        $action = $this->getData['action'] ?? self::DEFAULT_ACTION;
-        $view = new View();
+
+
         $viewParams = [];
 
-        switch ($action) {
+        switch ($this->action()) {
             case 'create':
                 $page = 'create';
                 $created = false;
-                if (!empty($this->postData)) {
+                $data = $this->getRequestPost();
+                if (!empty($data)) {
                     $viewParams = [
-                        'title' =>   $this->postData['title'],
-                        'description' => $this->postData['description']
+                        'title' =>   $data['title'],
+                        'description' => $data['description']
                     ];
                     $created = true;
                 }
@@ -49,7 +52,22 @@ class Controller
                 break;
         }
 
-        $view->render($page, $viewParams);
+        $this->view->render($page, $viewParams);
         exit('stop');
+    }
+
+    private function getRequestPost(): array
+    {
+        return $this->request['post'] ?? [];
+    }
+
+    private function getRequestGet(): array
+    {
+        return $this->request['get'] ?? [];
+    }
+
+    private function action(): string
+    {
+        return $this->getRequestGet()['action'] ?? self::DEFAULT_ACTION;
     }
 }
