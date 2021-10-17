@@ -17,10 +17,17 @@ $viewParams = [];
 
 if ($action === 'create') {
     $page = 'create';
-    $viewParams['resultCreate'] = "udało się";
+    $created = false;
+    if (!empty($_POST)) {
+        $viewParams = [
+            'title' =>   $_POST['title'],
+            'description' => $_POST['description']
+        ];
+        $created = true;
+    }
+    $viewParams['created'] = $created;
 } else {
     $page = 'list';
-    $viewParams["resultList"] = "wyświetlamy notatki";
 }
 
 $view->render($page, $viewParams);
