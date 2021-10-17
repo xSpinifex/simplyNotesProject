@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use IntlBreakIterator;
+
 require_once("src/Utils/debug.php");
 require_once("src/View.php");
 
@@ -15,19 +17,29 @@ $view = new View();
 
 $viewParams = [];
 
-if ($action === 'create') {
-    $page = 'create';
-    $created = false;
-    if (!empty($_POST)) {
+switch ($action) {
+    case 'create':
+        $page = 'create';
+        $created = false;
+        if (!empty($_POST)) {
+            $viewParams = [
+                'title' =>   $_POST['title'],
+                'description' => $_POST['description']
+            ];
+            $created = true;
+        }
+        $viewParams['created'] = $created;
+        break;
+    case 'show':
         $viewParams = [
-            'title' =>   $_POST['title'],
-            'description' => $_POST['description']
+            'title' =>  "Tytuł notatki z bazy danych",
+            'description' => "opis Notatki z Bazy Danych"
         ];
-        $created = true;
-    }
-    $viewParams['created'] = $created;
-} else {
-    $page = 'list';
+        break;
+    default:
+        $page = 'list';
+        break;
 }
+
 
 $view->render($page, $viewParams);
