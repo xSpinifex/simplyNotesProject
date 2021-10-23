@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
-use IntlBreakIterator;
-
 require_once("src/Utils/debug.php");
 require_once("src/Controller.php");
+
+$configuration =  require_once("config/config.php");
 
 
 $request = [
@@ -15,5 +15,6 @@ $request = [
     'post' => $_POST
 ];
 
-$controller = new Controller($request);
-$controller->run();
+// $controller = new Controller($request);
+// $controller->run();
+(new Controller($request))->run();
