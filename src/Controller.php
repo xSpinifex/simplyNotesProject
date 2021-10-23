@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Exception\AppException;
+use App\Exception\ConfigurationException;
+
 require_once("src/View.php");
 require_once("src/Database.php");
+require_once("src\Exceptions\ConfigurationException.php");
 
 class Controller
 {
@@ -26,7 +30,14 @@ class Controller
 
     public function __construct(array $request)
     {
-        $db = new Database(self::$configuration['db']);
+        if (empty(self::$configuration['db'])) {
+            throw new ConfigurationException('Wystąpił dataBase error');
+        } else {
+            $configurationDb = self::$configuration['db'];
+        }
+
+
+        $db = new Database($configurationDb);
         $this->request = $request;
         $this->view = new View();
     }
