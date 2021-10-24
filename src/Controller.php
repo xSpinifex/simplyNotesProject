@@ -72,14 +72,16 @@ class Controller
                 $page = 'list';
                 $data = $this->getRequestGet();
                 $notes = $this->database->getNotes();
-                dump($notes);
 
-                $viewParams['before'] = $data['before'] ?? null;
-                $viewParams['notes'] = $notes ?? null;
+                $viewParams = [
+                    'before' => $data['before'] ?? null,
+                    'notes' => $notes ?? null
+                ];
+
                 break;
         }
 
-        $this->view->render($page, $viewParams);
+        $this->view->render($page, $viewParams ?? []);
         exit('stop');
     }
 
