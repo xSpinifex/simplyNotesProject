@@ -26,6 +26,19 @@ class Database
         }
     }
 
+    public function getNotes(): array
+    {
+        try {
+            $notes = [];
+            $query = "SELECT id, title, created from notes";
+            $result =  $this->conn->query($query);
+            $notes = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $notes;
+        } catch (Throwable $e) {
+            throw new StorageException("Nie udało się pobrać danych o notatkach", 400);
+        }
+    }
+
     public function createNote(array $date): void
     {
         try {

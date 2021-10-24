@@ -71,14 +71,19 @@ class Controller
             default:
                 $page = 'list';
                 $data = $this->getRequestGet();
+                $notes = $this->database->getNotes();
+                dump($notes);
 
                 $viewParams['before'] = $data['before'] ?? null;
+                $viewParams['notes'] = $notes ?? null;
                 break;
         }
 
         $this->view->render($page, $viewParams);
         exit('stop');
     }
+
+
 
     private function getRequestPost(): array
     {
