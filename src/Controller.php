@@ -6,6 +6,7 @@ namespace App;
 
 use App\Exception\AppException;
 use App\Exception\ConfigurationException;
+use App\Exception\NotFoundException;
 
 require_once("src/View.php");
 require_once("src/Database.php");
@@ -62,9 +63,17 @@ class Controller
                 }
                 break;
             case 'show':
+                $page = 'show';
+                $id = $this->getRequestGet()['id'] ?? null;
+
+                try {
+                    $note = $this->database->getNote((int)$id);
+                } catch (NotFoundException) {
+                }
+                dump($note);
                 $viewParams = [
-                    'title' =>  "Tytuł notatki z bazy danych",
-                    'description' => "opis Notatki z Bazy Danych"
+                    'title' =>  $note['title'] ?? null,
+                    'description' => $note['description'] ?? null
                 ];
                 break;
 

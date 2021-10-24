@@ -33,4 +33,5 @@ try {
     echo $e->getMessage();
 } catch (Throwable $e) {
     echo 'Wystąpił błąd w aplikacji';
+    echo $e->getMessage();
 }
