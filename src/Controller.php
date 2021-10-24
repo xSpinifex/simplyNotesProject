@@ -60,20 +60,26 @@ class Controller
                     ];
                     $this->database->createNote($noteData);
                     header('Location: /?before=created'); //dzięki temu uzyskujemy przekierowanie.
+                    exit;
                 }
                 break;
             case 'show':
                 $page = 'show';
                 $id = $this->getRequestGet()['id'] ?? null;
 
+                if (!$id) {
+                    header('Location: /?error=missingNoteId');
+                    exit;
+                }
+
                 try {
                     $note = $this->database->getNote((int)$id);
                 } catch (NotFoundException) {
+                    header('Location: /?error=noteNotFound');
+                    exit;
                 }
-                dump($note);
                 $viewParams = [
-                    'title' =>  $note['title'] ?? null,
-                    'description' => $note['description'] ?? null
+                    'note' => $note
                 ];
                 break;
 
@@ -84,7 +90,8 @@ class Controller
 
                 $viewParams = [
                     'before' => $data['before'] ?? null,
-                    'notes' => $notes ?? null
+                    'notes' => $notes ?? null,
+                    'error' => $data['error'] ?? null
                 ];
 
                 break;

@@ -11,6 +11,21 @@
                 }
             }
             ?>
+        </div>
+        <div class="error">
+            <?php
+            if (!empty($params['error'])) {
+
+                switch ($params['error']) {
+                    case 'noteNotFound':
+                        echo 'Notatka nie została odnaleziona!!';
+                        break;
+                    case 'missingNoteId':
+                        echo 'Brakujący parametr ID notatki';
+                        break;
+                }
+            }
+            ?>
 
         </div>
         <div class="tbl-header">
@@ -34,7 +49,9 @@
                             <td><?php echo htmlentities($note['title']) ?></td>
                             <td><?php echo htmlentities($note['created']) ?></td>
                             <td>
-                                <a href="/?action=show&id=<?php echo $note['id']; ?>">Pokaż </a>
+                                <a href="/?action=show&id=<?php echo $note['id']; ?>">
+                                    <button> Pokaż</button>
+                                </a>
 
                             </td>
                         </tr>
