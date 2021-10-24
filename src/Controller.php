@@ -49,20 +49,17 @@ class Controller
         switch ($this->action()) {
             case 'create':
                 $page = 'create';
-                $created = false;
                 $data = $this->getRequestPost();
+
                 if (!empty($data)) {
-                    $viewParams = [
-                        'title' =>   $data['title'],
+                    $created = true;
+                    $noteData = [
+                        'title' => $data['title'],
                         'description' => $data['description']
                     ];
-                    $created = true;
-                    $this->database->createNote($data);
-                    header('Location: /'); //dzięki temu uzyskujemy przekierowanie.
+                    $this->database->createNote($noteData);
+                    header('Location: /?before=created'); //dzięki temu uzyskujemy przekierowanie.
                 }
-                $viewParams['created'] = $created;
-
-
                 break;
             case 'show':
                 $viewParams = [
@@ -70,8 +67,12 @@ class Controller
                     'description' => "opis Notatki z Bazy Danych"
                 ];
                 break;
+
             default:
                 $page = 'list';
+                $data = $this->getRequestGet();
+
+                $viewParams['before'] = $data['before'] ?? null;
                 break;
         }
 
