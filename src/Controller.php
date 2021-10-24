@@ -17,7 +17,7 @@ class Controller
     private const DEFAULT_ACTION = "list";
 
     private static array $configuration = [];
-
+    private Database $database;
     private array $request;
     private View $view;
 
@@ -36,8 +36,7 @@ class Controller
             $configurationDb = self::$configuration['db'];
         }
 
-
-        $db = new Database($configurationDb);
+        $this->database = new Database($configurationDb);
         $this->request = $request;
         $this->view = new View();
     }
@@ -45,8 +44,6 @@ class Controller
 
     public function run(): void
     {
-
-
         $viewParams = [];
 
         switch ($this->action()) {
@@ -60,8 +57,12 @@ class Controller
                         'description' => $data['description']
                     ];
                     $created = true;
+                    $this->database->createNote($data);
+                    header('Location: /'); //dzięki temu uzyskujemy przekierowanie.
                 }
                 $viewParams['created'] = $created;
+
+
                 break;
             case 'show':
                 $viewParams = [
